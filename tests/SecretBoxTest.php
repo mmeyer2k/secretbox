@@ -15,7 +15,7 @@ final class SecretBoxTest extends TestCase
         $key = random_bytes(32);
 
         $enc = SecretBox::encrypt($msg, $key);
-        $dec = SecretBox::decrypt($enc, $key);
+        $dec = SecretBox::decrypt($enc, [$key]);
 
         $this->assertSame($dec, $msg);
     }
@@ -26,14 +26,14 @@ final class SecretBoxTest extends TestCase
 
         $this->expectException(Exception::class);
 
-        SecretBox::decrypt('a bunch of garbage', $key);
+        SecretBox::decrypt('a bunch of garbage', [$key]);
     }
 
     public function testBadKey(): void
     {
         $this->expectException(Exception::class);
 
-        (new AesGcm('short key'))->encrypt('Hello World!');
+        SecretBox::encrypt('asdf', 'bad key');
     }
 
     public function testKeyRotation(): void
@@ -42,15 +42,13 @@ final class SecretBoxTest extends TestCase
         $key2 = random_bytes(32);
         $key3 = random_bytes(32);
 
-        $gcm = new AesGcm($key1);
-        $enc = $gcm->encrypt('Hello World!');
+        $msg = 'Hello World!';
+        $enc = SecretBox::encrypt($msg, $key1);
 
-        $gcm = new AesGcm($key2, [$key1]);
-        $dec = $gcm->decrypt($enc);
-        $this->assertEquals('Hello World!', $dec);
+        $dec = SecretBox::decrypt($enc, [$key2, $key1]);
+        $this->assertEquals($msg, $dec);
 
-        $gcm = new AesGcm($key3, [$key1, $key2]);
-        $dec = $gcm->decrypt($enc);
-        $this->assertEquals('Hello World!', $dec);
+        $dec = SecretBox::decrypt($enc, [$key3, $key2, $key1]);
+        $this->assertEquals($msg, $dec);
     }
 }
