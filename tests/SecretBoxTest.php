@@ -2,9 +2,6 @@
 
 declare(strict_types=1);
 
-namespace tests;
-
-use SecretBox;
 use PHPUnit\Framework\TestCase;
 
 final class SecretBoxTest extends TestCase
