@@ -12,14 +12,15 @@ class SecretBox
         return $nonce . $cipher;
     }
 
-    public static function decrypt(string $encrypted, array $keys): string
+    public static function decrypt(string $encrypted, array $keys, &$index = null): string
     {
         $nonce = substr($encrypted, 0, SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
         $cipher = substr($encrypted, SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
 
-        foreach ($keys as $key) {
+        foreach ($keys as $i => $key) {
             $plain = sodium_crypto_secretbox_open($cipher, $nonce, $key);
             if ($plain !== false) {
+                $index = $i;
                 return $plain;
             }
         }
