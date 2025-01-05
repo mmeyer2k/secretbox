@@ -1,13 +1,6 @@
 version: 2.1
 
 jobs:
-  php81:
-    docker:
-      - image: cimg/php:8.1
-    steps:
-      - checkout
-      - run: composer require phpunit/phpunit --dev
-      - run: php vendor/bin/phpunit
   php82:
     docker:
       - image: cimg/php:8.2
@@ -34,7 +27,6 @@ workflows:
   version: 2
   workflow:
     jobs:
-      - php81
       - php82
       - php83
       - php84
