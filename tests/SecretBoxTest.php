@@ -62,4 +62,13 @@ final class SecretBoxTest extends TestCase
         $this->assertEquals($msg, $dec);
         $this->assertEquals(2, $idx);
     }
+
+    public function testVector()
+    {
+        $msg = 'Hello World!';
+        $key = str_repeat(chr(0), 32);
+        $vector = base64_decode('YC6q3zfHDmvwkpn1cVprKn2zcEBQDECzM10HlhPnpLRbMc5q/yZsKUX5RzZ3oyvOeKmVsA==');
+        $dec = SecretBox::decrypt($vector, $key);
+        $this->assertEquals($msg, $dec);
+    }
 }
