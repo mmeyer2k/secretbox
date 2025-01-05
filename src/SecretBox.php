@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Mmeyer2k\SecretBox;
 
+use Random\RandomException;
+use SensitiveParameter;
 use SodiumException;
 
 class SecretBox
@@ -14,8 +16,12 @@ class SecretBox
      * @param string $key
      * @return string
      * @throws SodiumException
+     * @throws RandomException
      */
-    public static function encrypt(string $message, string $key): string
+    public static function encrypt(
+        #[SensitiveParameter] string $message,
+        #[SensitiveParameter] string $key,
+    ): string
     {
         $nonce = random_bytes(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
         $cipher = sodium_crypto_secretbox($message, $nonce, $key);
@@ -27,11 +33,15 @@ class SecretBox
      * Decrypt secretbox message
      * @param string $encrypted
      * @param array|string $keys
-     * @param $index
+     * @param null $index
      * @return string
      * @throws SodiumException
      */
-    public static function decrypt(string $encrypted, array|string $keys, &$index = null): string
+    public static function decrypt(
+        #[SensitiveParameter] string       $encrypted,
+        #[SensitiveParameter] array|string $keys,
+        #[SensitiveParameter] null         &$index = null
+    ): string
     {
         $keys = is_string($keys) ? [$keys] : $keys;
         $nonce = substr($encrypted, 0, SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
