@@ -40,17 +40,23 @@ final class SecretBoxTest extends TestCase
         $key2 = random_bytes(32);
         $key3 = random_bytes(32);
 
+        $keys = [$key1, $key2, $key3];
+
         $msg = 'Hello World!';
         $enc = SecretBox::encrypt($msg, $key1);
-        $dec = SecretBox::decrypt($enc, [$key1], $idx);
+
+        $idx = null;
+        $dec = SecretBox::decrypt($enc, $keys, $idx);
         $this->assertEquals($msg, $dec);
         $this->assertEquals(0, $idx);
 
-        $dec = SecretBox::decrypt($enc, [$key2, $key1], $idx);
+        $idx = null;
+        $dec = SecretBox::decrypt($enc, $keys, $idx);
         $this->assertEquals($msg, $dec);
         $this->assertEquals(1, $idx);
 
-        $dec = SecretBox::decrypt($enc, [$key3, $key2, $key1], $idx);
+        $idx = null;
+        $dec = SecretBox::decrypt($enc, $keys, $idx);
         $this->assertEquals($msg, $dec);
         $this->assertEquals(2, $idx);
     }
