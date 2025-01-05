@@ -49,3 +49,13 @@ $index = null;
 
 $dec = SecretBox::decrypt($ciphertext, $keys, $index);
 ```
+
+## handle decryption failures
+A `\SodiumException` will be thrown if decryption failed due to no matching keys.
+```php
+try {
+    $dec = SecretBox::decrypt($ciphertext, $key);
+} catch (\SodiumException) {
+    # ...
+}
+```
