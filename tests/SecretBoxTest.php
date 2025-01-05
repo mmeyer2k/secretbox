@@ -36,26 +36,28 @@ final class SecretBoxTest extends TestCase
 
     public function testKeyRotation(): void
     {
+        $key0 = random_bytes(32);
         $key1 = random_bytes(32);
         $key2 = random_bytes(32);
-        $key3 = random_bytes(32);
 
-        $keys = [$key1, $key2, $key3];
+        $keys = [$key0, $key1, $key2];
 
         $msg = 'Hello World!';
-        $enc = SecretBox::encrypt($msg, $key1);
 
         $idx = null;
+        $enc = SecretBox::encrypt($msg, $key0);
         $dec = SecretBox::decrypt($enc, $keys, $idx);
         $this->assertEquals($msg, $dec);
         $this->assertEquals(0, $idx);
 
         $idx = null;
+        $enc = SecretBox::encrypt($msg, $key1);
         $dec = SecretBox::decrypt($enc, $keys, $idx);
         $this->assertEquals($msg, $dec);
         $this->assertEquals(1, $idx);
 
         $idx = null;
+        $enc = SecretBox::encrypt($msg, $key2);
         $dec = SecretBox::decrypt($enc, $keys, $idx);
         $this->assertEquals($msg, $dec);
         $this->assertEquals(2, $idx);
