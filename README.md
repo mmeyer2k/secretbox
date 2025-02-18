@@ -1,6 +1,8 @@
 # secretbox
 A minimalist libsodium secretbox implementation with key rotation.
 
+[![.github/workflows/php-tests.yml](https://github.com/mmeyer2k/secretbox/actions/workflows/php-tests.yml/badge.svg)](https://github.com/mmeyer2k/secretbox/actions/workflows/php-tests.yml)
+
 ## install
 
 ```bash
