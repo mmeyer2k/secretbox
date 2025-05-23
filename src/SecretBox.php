@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Mmeyer2k\SecretBox;
 
+use Random\RandomException;
 use SodiumException;
 
 class SecretBox
@@ -13,12 +14,14 @@ class SecretBox
      * @param string $message
      * @param string $key
      * @return string
-     * @throws SodiumException
+     * @throws SodiumException|RandomException
      */
     public static function encrypt(string $message, string $key): string
     {
         $nonce = random_bytes(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
         $cipher = sodium_crypto_secretbox($message, $nonce, $key);
+
+        sodium_memzero($key);
 
         return $nonce . $cipher;
     }
