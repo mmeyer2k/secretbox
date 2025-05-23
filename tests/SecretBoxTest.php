@@ -44,23 +44,17 @@ final class SecretBoxTest extends TestCase
 
         $msg = 'Hello World!';
 
-        $idx = null;
         $enc = SecretBox::encrypt($msg, $key0);
-        $dec = SecretBox::decrypt($enc, $keys, $idx);
+        $dec = SecretBox::decrypt($enc, $keys);
         $this->assertEquals($msg, $dec);
-        $this->assertEquals(0, $idx);
 
-        $idx = null;
         $enc = SecretBox::encrypt($msg, $key1);
-        $dec = SecretBox::decrypt($enc, $keys, $idx);
+        $dec = SecretBox::decrypt($enc, $keys);
         $this->assertEquals($msg, $dec);
-        $this->assertEquals(1, $idx);
 
-        $idx = null;
         $enc = SecretBox::encrypt($msg, $key2);
-        $dec = SecretBox::decrypt($enc, $keys, $idx);
+        $dec = SecretBox::decrypt($enc, $keys);
         $this->assertEquals($msg, $dec);
-        $this->assertEquals(2, $idx);
     }
 
     public function testVector()
