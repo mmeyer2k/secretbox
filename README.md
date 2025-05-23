@@ -44,14 +44,6 @@ $dec = SecretBox::decrypt($ciphertext, [
 ]);
 ```
 
-If decryption is successful, the index of the correct key will be passed by reference through the optional `index` parameter.
-In this example, `$index` will equal 0 if the first key was successful
-```php
-$index = null;
-
-$dec = SecretBox::decrypt($ciphertext, $keys, $index);
-```
-
 ## handle decryption failures
 A `\SodiumException` will be thrown if decryption failed due to no matching keys.
 ```php

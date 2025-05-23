@@ -30,24 +30,33 @@ class SecretBox
      * Decrypt secretbox message
      * @param string $encrypted
      * @param array|string $keys
-     * @param $index
      * @return string
      * @throws SodiumException
      */
-    public static function decrypt(string $encrypted, array|string $keys, &$index = null): string
+    public static function decrypt(string $encrypted, array|string $keys): string
     {
         $keys = is_string($keys) ? [$keys] : $keys;
         $nonce = substr($encrypted, 0, SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
         $cipher = substr($encrypted, SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
 
-        foreach ($keys as $i => $key) {
+        $plain = false;
+
+        foreach ($keys as $key) {
             $plain = sodium_crypto_secretbox_open($cipher, $nonce, $key);
+
             if ($plain !== false) {
-                $index = $i;
-                return $plain;
+                break;
             }
         }
 
-        throw new SodiumException('SecretBox: decryption failed');
+        foreach ($keys as &$key) {
+            sodium_memzero($key);
+        }
+
+        if ($plain === false) {
+            throw new SodiumException('SecretBox: decryption failed');
+        }
+
+        return $plain;
     }
 }
