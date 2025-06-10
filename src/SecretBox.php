@@ -53,7 +53,7 @@ class SecretBox
             sodium_memzero($key);
         }
 
-        if ($plain === false) {
+        if (false === $plain) {
             throw new SodiumException('SecretBox: decryption failed');
         }
 
