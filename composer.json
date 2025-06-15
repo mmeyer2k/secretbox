@@ -1,7 +1,15 @@
 {
   "name": "mmeyer2k/secretbox",
+  "description": "A minimalist PHP wrapper for libsodium secretbox",
   "type": "library",
   "license": "MIT",
+  "keywords": [
+    "encryption",
+    "security",
+    "crypto",
+    "sodium",
+    "secretbox"
+  ],
   "autoload": {
     "psr-4": {
       "Mmeyer2k\\SecretBox\\":  "src/"

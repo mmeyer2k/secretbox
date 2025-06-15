@@ -41,15 +41,11 @@ class SecretBox
 
         $plain = false;
 
-        foreach ($keys as $key) {
-            $plain = sodium_crypto_secretbox_open($cipher, $nonce, $key);
-
-            if ($plain !== false) {
-                break;
-            }
-        }
-
         foreach ($keys as &$key) {
+            if (false === $plain) {
+                $plain = sodium_crypto_secretbox_open($cipher, $nonce, $key);
+            }
+
             sodium_memzero($key);
         }
 
