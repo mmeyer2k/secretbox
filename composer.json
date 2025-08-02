@@ -1,6 +1,6 @@
 {
   "name": "mmeyer2k/secretbox",
-  "description": "A minimalist PHP wrapper for libsodium secretbox",
+  "description": "A minimalist wrapper for libsodium secretbox",
   "type": "library",
   "license": "MIT",
   "keywords": [

@@ -29,7 +29,7 @@ class SecretBox
     /**
      * Decrypt secretbox message
      * @param string $encrypted
-     * @param array|string $keys
+     * @param array<string>|string $keys
      * @return string
      * @throws SodiumException
      */
