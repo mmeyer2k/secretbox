@@ -1,55 +1,76 @@
 # secretbox
-A minimalist libsodium secretbox implementation with key rotation.
 
-[![.github/workflows/php-tests.yml](https://github.com/mmeyer2k/secretbox/actions/workflows/php-tests.yml/badge.svg)](https://github.com/mmeyer2k/secretbox/actions/workflows/php-tests.yml)
+A minimalist [libsodium](https://libsodium.gitbook.io/doc/) secretbox implementation for PHP, supporting key rotation.
 
-## install
+[![PHP Tests](https://github.com/mmeyer2k/secretbox/actions/workflows/php-tests.yml/badge.svg)](https://github.com/mmeyer2k/secretbox/actions/workflows/php-tests.yml)
+
+## Features
+- Encrypt and decrypt messages using libsodium's secretbox
+- Support for key rotation (multiple keys for decryption)
+- Simple API for secure key management
+
+## Installation
+
+Install via Composer:
 
 ```bash
 composer require mmeyer2k/secretbox
 ```
 
-## usage
+Requires PHP 8.2+ and the Sodium extension.
+
+## Usage
+
+Basic encryption and decryption:
+
 ```php
 use \Mmeyer2k\SecretBox\SecretBox;
 
-$key = random_bytes(32);
+$key = random_bytes(32); // 32 bytes required
 
-$enc = SecretBox::encrypt('secret message', $key);
-$dec = SecretBox::decrypt($enc, $key);
+$ciphertext = SecretBox::encrypt('secret message', $key);
+$plaintext = SecretBox::decrypt($ciphertext, $key);
 ```
 
-## keys
+## Key Management
 
-### create
-SecretBox expects keys to be strings with 32 bytes of pseudorandom-ness.
+### Creating a Key
+Generate a secure 32-byte key:
+
 ```bash
-head -c 32 /dev/urandom | base64 -w 0 | xargs echo
+head -c 32 /dev/urandom | base64 -w 0
 ```
 
-### store
+### Storing a Key
+Store keys in environment variables or configuration files as base64 strings. Decode before use:
 
-In code or environment files, it is best to store keys in an encoded format.
 ```php
-$key = base64_decode("[your base64 key]");
+$key = base64_decode('[your base64 key]');
 ```
 
-### rotate
-Easily rotate keys by passing allowable decryption keys in an array.
+### Key Rotation
+Support multiple keys for seamless rotation:
+
 ```php
-$dec = SecretBox::decrypt($ciphertext, [
-    'key 0',
-    'key 1',
-    'key 2',
+$plaintext = SecretBox::decrypt($ciphertext, [
+    $oldKey,
+    $newKey,
 ]);
 ```
+Decryption will succeed with any valid key in the array.
 
-## handle decryption failures
-A `\SodiumException` will be thrown if decryption failed due to no matching keys.
+## Error Handling
+
+If decryption fails (e.g., no matching key), a `\SodiumException` is thrown:
+
 ```php
 try {
-    $dec = SecretBox::decrypt($ciphertext, $key);
-} catch (\SodiumException) {
-    # ...
+    $plaintext = SecretBox::decrypt($ciphertext, $key);
+} catch (\SodiumException $e) {
+    // Handle decryption failure
 }
 ```
+
+## License
+
+MIT
